@@ -42,7 +42,7 @@
               </descriptorRefs>
               <archive>
 			    <manifest>
-				<mainClass>com.sfo.foodtrucks.FoodTruckFinder</mainClass>
+					<mainClass>com.sfo.foodtrucks.FoodTruckFinder</mainClass>
 			    </manifest>
 			  </archive>
             </configuration>

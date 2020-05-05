@@ -4,31 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sfo.foodtrucks.builder.TruckEntityBuilder;
-import com.sfo.foodtrucks.dto.TruckDTO;
+import com.sfo.foodtrucks.builder.TruckDtoBuilder;
+import com.sfo.foodtrucks.dto.TruckDto;
 import com.sfo.foodtrucks.entity.TruckEntity;
 import com.sfo.foodtrucks.request.CurrentRequest;
 import com.sfo.foodtrucks.util.FoodTruckConstants;
 
-public class TruckEntityBuilderImpl implements TruckEntityBuilder {
+public class TruckDtoBuilderImpl implements TruckDtoBuilder {
 
 	@Override
-	public List<TruckEntity> buildTruckEntity(List<TruckDTO> truckDTOs) {
-		List<TruckEntity> truckEntityList = new ArrayList<TruckEntity>();
-		truckDTOs.forEach(x -> {
-			truckEntityList.add(new TruckEntity(x.getApplicant(),x.getLocation()));
+	public List<TruckDto> buildTruckDto(List<TruckEntity> truckEntities) {
+		List<TruckDto> truckDtoList = new ArrayList<TruckDto>();
+		truckEntities.forEach(x -> {
+			truckDtoList.add(new TruckDto(x.getApplicant(),x.getLocation()));
 		});
-		return truckEntityList;
+		return truckDtoList;
 	}
 
 	@Override
-	public List<TruckEntity> buildTruckEntityRunningNow(List<TruckDTO> truckDTOs, CurrentRequest currentRequest) {
-		List<TruckDTO> currentRunningTrucks = truckDTOs.stream().filter(
+	public List<TruckDto> buildTruckDtoRunningNow(List<TruckEntity> truckEntities, CurrentRequest currentRequest) {
+		//filtering the current running trucks
+		// comparing if starttime <= time < endtime 
+		List<TruckEntity> currentRunningTrucks = truckEntities.stream().filter(
 													x -> 
 														parseTimeString(x.getStart24()) <= parseTimeString(currentRequest.getCurrentHour()+":"+currentRequest.getCurrentMinutes()) && 
 														parseTimeString(x.getEnd24()) > parseTimeString(currentRequest.getCurrentHour()+":"+currentRequest.getCurrentHour())
 										).collect(Collectors.toList());
-		return buildTruckEntity(currentRunningTrucks);
+		return buildTruckDto(currentRunningTrucks);
 	}
 	
 	
@@ -46,6 +48,7 @@ public class TruckEntityBuilderImpl implements TruckEntityBuilder {
 			return -1;
 		}
 	}
+
 	
 	
 

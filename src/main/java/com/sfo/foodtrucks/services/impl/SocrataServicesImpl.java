@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfo.foodtrucks.builder.impl.TruckEntityBuilderImpl;
+import com.sfo.foodtrucks.builder.impl.TruckDtoBuilderImpl;
 import com.sfo.foodtrucks.client.HttpClientUtils;
-import com.sfo.foodtrucks.dto.TruckDTO;
+import com.sfo.foodtrucks.dto.TruckDto;
 import com.sfo.foodtrucks.entity.TruckEntity;
 import com.sfo.foodtrucks.request.CurrentRequest;
 import com.sfo.foodtrucks.services.SocrataServices;
@@ -18,7 +18,7 @@ public class SocrataServicesImpl implements SocrataServices{
 
 
 	@Override
-	public List<TruckEntity> getFootTruckFilteredByDayOrderedByName(CurrentRequest currentRequest) {
+	public List<TruckDto> getFootTruckFilteredByDayOrderedByName(CurrentRequest currentRequest) {
 		
 		//Creating the URL for GET request
 		String url = assembleSocrataURL(currentRequest.getCurrentDay());
@@ -26,26 +26,26 @@ public class SocrataServicesImpl implements SocrataServices{
 		//GET Rest Client call
 		String responseJSON = new HttpClientUtils().getRequest(url);
 		
-		// Convert StringJSON to List DTO's
-		List<TruckDTO> trucksDTOs = convertJSONArrayStringToList(responseJSON);
+		// Convert StringJSON to List Entities
+		List<TruckEntity> trucksEntities = convertJSONArrayStringToList(responseJSON);
 		
-		//building and returning Entity
-		return (new TruckEntityBuilderImpl()).buildTruckEntityRunningNow(trucksDTOs, currentRequest);
+		//building and returning Dto
+		return (new TruckDtoBuilderImpl()).buildTruckDtoRunningNow(trucksEntities, currentRequest);
 	}
 
 	@Override
-	public List<TruckEntity> getCurrentFootTruckFilteredByDayOrderedByName(CurrentRequest currentRequest) {
+	public List<TruckDto> getCurrentFootTruckFilteredByDayOrderedByName(CurrentRequest currentRequest) {
 		return getFootTruckFilteredByDayOrderedByName(currentRequest);
 	}
 	
 	@Override
-	public List<TruckEntity> getAllFootTruck() {
+	public List<TruckDto> getAllFootTruck() {
 		
 		return null;
 	}
 
 	@Override
-	public List<TruckEntity> getFootTruckFiltered(CurrentRequest currentRequest) {
+	public List<TruckDto> getFootTruckFiltered(CurrentRequest currentRequest) {
 		
 		return null;
 	}
@@ -77,12 +77,12 @@ public class SocrataServicesImpl implements SocrataServices{
 	 * @param jsonArray
 	 * @return list of truckDTO objects
 	 */
-	public List<TruckDTO> convertJSONArrayStringToList(String jsonArray){
+	public List<TruckEntity> convertJSONArrayStringToList(String jsonArray){
 		
 		ObjectMapper mapper = new ObjectMapper();
-		List<TruckDTO> listT = new ArrayList<TruckDTO>();
+		List<TruckEntity> listT = new ArrayList<TruckEntity>();
 		try {
-			listT = Arrays.asList(mapper.readValue(jsonArray, TruckDTO[].class));
+			listT = Arrays.asList(mapper.readValue(jsonArray, TruckEntity[].class));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

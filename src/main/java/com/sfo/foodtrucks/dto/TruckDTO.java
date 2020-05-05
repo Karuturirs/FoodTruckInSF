@@ -1,41 +1,41 @@
 package com.sfo.foodtrucks.dto;
 
-public class TruckDTO {
+/*
+ * TruckEntity holds the data name and location related 
+ * to the current available truck and has implementation to sort on the name 
+ */
+public class TruckDto implements Comparable<TruckDto>{
 	
-	private String applicant;
-	private String location;
-	private String start24;
-	private String end24;
-
-	public String getLocation() {
-		return location;
+	private String name;
+	private String address;
+	
+	public TruckDto(String name, String address) {
+		super();
+		this.name = name;
+		this.address = address;
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	public String getName() {
+		return name;
 	}
-	public String getStart24() {
-		return start24;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public void setStart24(String start24) {
-		this.start24 = start24;
+	public String getAddress() {
+		return address;
 	}
-	public String getEnd24() {
-		return end24;
-	}
-	public void setEnd24(String end24) {
-		this.end24 = end24;
-	}
-	public String getApplicant() {
-		return applicant;
-	}
-	public void setApplicant(String applicant) {
-		this.applicant = applicant;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 	@Override
-	public String toString() {
-		return "Truck [applicant=" + applicant + ", location=" + location + ", start24=" + start24 + ", end24=" + end24
-				+ "]";
+	public int compareTo(TruckDto t) {
+		return this.name.compareTo(t.getName());
 	}
-
+	@Override
+	public String toString() {
+		return  name + " " + address;
+	}
+	
+	
+	
 }
